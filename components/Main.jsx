@@ -3,6 +3,7 @@ import Image from "next/image";
 import moment from "moment";
 
 const Main = ({ props }) => {
+    console.log(props.main.temp);
     return (
         <div className="container mx-auto px-10 mb-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -27,13 +28,13 @@ const Main = ({ props }) => {
                             </div>
                             <div>
                                 <h2 className="text-lg text-gray-500 font-light block">
-                                    {props.weather[0].description}
+                                    {/* weather.map((item) => {return item.description}) */}
                                 </h2>
                             </div>
                         </div>
                         <div className="w-full flex items-center justify-center mb-8">
                             <Image
-                                src="/../public/sol.png"
+                                src="/public/sol.png"
                                 alt=""
                                 width="150px"
                                 height="150px"

@@ -9,15 +9,16 @@ export default function Home() {
 
 
         useEffect(() => {
-
+                let dados = {};
                 navigator.geolocation.getCurrentPosition(function (position) {
-                        
-                        getWeatherData(position.coords.latitude, position.coords.longitude).then(data => {
-                                setWeatherData(data);
-                                console.log(data);
-                        }).catch(err => {
-                                console.log(err);
-                        });
+                        // console.log(position);
+                        getWeatherData(position.coords.latitude, position.coords.longitude)
+                                .then(data => {
+
+                                        setWeatherData(data);
+                                }).catch(err => {
+                                        console.log(err);
+                                });
 
                 });
 
@@ -26,7 +27,7 @@ export default function Home() {
 
         return (
                 <div>
-                        {<Main props={weatherData}/>}
+                        {<Main props={weatherData} />}
                 </div>
         )
 }

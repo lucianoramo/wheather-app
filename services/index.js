@@ -4,7 +4,7 @@ const apiEndpoint = "http://api.openweathermap.org/data/2.5/weather";
 
 export const getWeatherData = async (lat, long) => {
 
-        const api_url = `${apiEndpoint}?lat=${lat}&lon=${long}&appid=${apiKey}`;
+        const api_url = `${apiEndpoint}?lat=${lat}&lon=${long}&appid=${apiKey}&units=metric&lang=pt_br `;
 
         const response = await fetch(api_url);
 
@@ -12,7 +12,7 @@ export const getWeatherData = async (lat, long) => {
                 throw new Error("Failed to fetch weather data");
         }
 
-        return response.json();
+        return  response.json()
 }
 
 

@@ -1,33 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { getWeatherData } from "../services";
-import { Main } from "../components";
+import React, { useState, useEffect } from "react";
+import Main  from "../components/Main";
+
 
 export default function Home() {
 
-        const [coords, setcoords] = useState([]);
-        const [weatherData, setWeatherData] = useState({});
-
+        const [coords, setCoords] = useState([])
 
         useEffect(() => {
-                let dados = {};
-                navigator.geolocation.getCurrentPosition(function (position) {
-                        // console.log(position);
-                        getWeatherData(position.coords.latitude, position.coords.longitude)
-                                .then(data => {
-
-                                        setWeatherData(data);
-                                }).catch(err => {
-                                        console.log(err);
-                                });
-
+        if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    setCoords([
+                        position.coords.latitude,
+                        position.coords.longitude,
+                    ]);
                 });
-
-
+            }
         }, []);
+
 
         return (
                 <div>
-                        {<Main props={weatherData} />}
+                        <Main props={coords}/>
                 </div>
         )
 }

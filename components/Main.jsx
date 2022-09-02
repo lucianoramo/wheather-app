@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import moment from "moment";
+import { useGeolocation } from "../components/Hooks";
 
-const Main = (coords) => {
+const Main = () => {
+    const { location, getGeolocation } = useGeolocation();
     const defaultValues = {
         city: "Loading...",
         temp: "...",
@@ -16,38 +18,42 @@ const Main = (coords) => {
 
     const [weatherData, setWeatherData] = useState(defaultValues);
 
-    useEffect(() => {
-        const [lat, lon] = coords.props;
-        if (lat && lon) {
-            const apiKey = "e4f8c0b2e93a83dcd12aed8e623f81ed";
-            const apiEndpoint =
-                "http://api.openweathermap.org/data/2.5/weather";
+    const fetchData = async (lat, lon) => {
+        const apiKey = "e4f8c0b2e93a83dcd12aed8e623f81ed";
+        const apiEndpoint = "http://api.openweathermap.org/data/2.5/weather";
+        console.log(Date.now());
+        const api_url = `${apiEndpoint}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br `;
+        const response = await fetch(api_url);
+        const data = await response.json();
 
-            const api_url = `${apiEndpoint}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br `;
-            const fetchData = async () => {
-                const response = await fetch(api_url);
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(
-                        "Não foi possível carregar os dados: " + data.message
-                    );
-                }
-
-                setWeatherData({
-                    city: data.name,
-                    temp: Math.round(data.main.temp),
-                    description: data.weather[0].description,
-                    wind: Math.round(data.wind.speed),
-                    humidity: Math.round(data.main.humidity),
-                    windDirection: Math.round(data.wind.deg),
-                    feels_like: Math.round(data.main.feels_like),
-                    icon: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-                });
-            };
-            fetchData();
+        if (!response.ok) {
+            throw new Error(
+                "Não foi possível carregar os dados: " + data.message
+            );
         }
-    }, [coords]);
+
+        setWeatherData({
+            city: data.name,
+            temp: Math.round(data.main.temp),
+            description: data.weather[0].description,
+            wind: Math.round(data.wind.speed),
+            humidity: Math.round(data.main.humidity),
+            windDirection: Math.round(data.wind.deg),
+            feels_like: Math.round(data.main.feels_like),
+            icon: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+        });
+    };
+    useEffect(() => {
+        getGeolocation();
+    }, []);
+    useEffect(() => {
+        console.log(location, "effect");
+        console.log(getGeolocation, "geo");
+
+        if (location) {
+            fetchData(location[0], location[1]);
+        }
+    }, [location]);
 
     return (
         <div className="container mx-auto px-10 mb-8">
@@ -128,11 +134,11 @@ const Main = (coords) => {
                                             <td className="text-2xl text-gray-600 px-4 py-4">
                                                 {weatherData.windDirection}°
                                                 <Image
-                                                        src="/arrow.png"
-                                                        alt=""
-                                                        width="20px"
-                                                        height="20px"
-                                                        className="origin-center transform rotate-130"
+                                                    src="/arrow.png"
+                                                    alt=""
+                                                    width="20px"
+                                                    height="20px"
+                                                    className={`origin-center  rotate-[${weatherData.windDirection}deg]`}
                                                 />
                                             </td>
                                         </tr>
@@ -141,9 +147,13 @@ const Main = (coords) => {
                             </div>
                         </div>
                         <div className="flex justify-center items-center text-center my-8 ">
-                            <span className="transition duration-500 ease transform hover:bg-slate-600 hover:text-white inline-block  text-lg font-medium rounded-full border-2 text-slate-800 px-8 py-3 cursor-pointer">
+                            <button
+                                type="button"
+                                onClick={getGeolocation}
+                                className="transition duration-500 ease hover:bg-slate-900 inline-block bg-slate-300 text-lg font-medium rounded-full text-white px-8 py-3 cursor-pointer"
+                            >
                                 Atualizar
-                            </span>
+                            </button>
                         </div>
                     </div>
                 </div>

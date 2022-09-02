@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from "react";
-import Main  from "../components/Main";
+import React , {useEffect}from "react";
+import Main from "../components/Main";
+import { useGeolocation } from "../components/Hooks";
 
 
 export default function Home() {
 
-        const [coords, setCoords] = useState([])
-
-        useEffect(() => {
-        if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    setCoords([
-                        position.coords.latitude,
-                        position.coords.longitude,
-                    ]);
-                });
-            }
-        }, []);
-
-
         return (
                 <div>
-                        <Main props={coords}/>
+                        <Main />
                 </div>
         )
 }

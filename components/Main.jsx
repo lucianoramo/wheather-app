@@ -1,59 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import moment from "moment";
-import { useGeolocation } from "../components/Hooks";
+import { useGeolocation, useFetchData } from "../components/Hooks";
 
-const Main = () => {
+const Main = ({ props }) => {
     const { location, getGeolocation } = useGeolocation();
-    const defaultValues = {
-        city: "Loading...",
-        temp: "...",
-        description: "Loading...",
-        wind: "0",
-        humidity: "0",
-        windDirection: "0",
-        feels_like: "0",
-        icon: "/sol.png",
-    };
+    const { data, loading, error, getFetchData } = useFetchData();
+    const [weatherData, setWeatherData] = useState(props);
 
-    const [weatherData, setWeatherData] = useState(defaultValues);
-
-    const fetchData = async (lat, lon) => {
-        const apiKey = "e4f8c0b2e93a83dcd12aed8e623f81ed";
-        const apiEndpoint = "http://api.openweathermap.org/data/2.5/weather";
-        console.log(Date.now());
-        const api_url = `${apiEndpoint}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br `;
-        const response = await fetch(api_url);
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(
-                "Não foi possível carregar os dados: " + data.message
-            );
-        }
-
-        setWeatherData({
-            city: data.name,
-            temp: Math.round(data.main.temp),
-            description: data.weather[0].description,
-            wind: Math.round(data.wind.speed),
-            humidity: Math.round(data.main.humidity),
-            windDirection: Math.round(data.wind.deg),
-            feels_like: Math.round(data.main.feels_like),
-            icon: `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
-        });
-    };
     useEffect(() => {
         getGeolocation();
     }, []);
-    useEffect(() => {
-        console.log(location, "effect");
-        console.log(getGeolocation, "geo");
 
+    useEffect(() => {
         if (location) {
-            fetchData(location[0], location[1]);
+            getFetchData(location);
         }
     }, [location]);
+
+    useEffect(() => {
+        if (data) {
+            setWeatherData(data);
+        }
+    }, [data]);
 
     return (
         <div className="container mx-auto px-10 mb-8">

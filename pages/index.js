@@ -1,13 +1,23 @@
-import React , {useEffect}from "react";
+import React from "react";
 import Main from "../components/Main";
-import { useGeolocation } from "../components/Hooks";
 
 
 export default function Home() {
 
+        const loadingWeatherData = {
+                city: "Loading...",
+                temp: "...",
+                description: "Loading...",
+                wind: "0",
+                humidity: "0",
+                windDirection: "0",
+                feels_like: "0",
+                icon: "/sol.png",
+            };
+
         return (
                 <div>
-                        <Main />
+                        <Main props={loadingWeatherData}/>
                 </div>
         )
 }

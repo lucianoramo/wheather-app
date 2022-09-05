@@ -54,6 +54,7 @@ const Main = ({ props }) => {
                         </div>
                         <div className="w-full flex items-center justify-center mb-8">
                             <Image
+                                visible={weatherData.icon}
                                 src={weatherData.icon}
                                 alt=""
                                 width="200px"

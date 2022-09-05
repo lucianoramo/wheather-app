@@ -25,8 +25,8 @@ export const useFetchData = () => {
     const getFetchData = async (location) => {
         setLoading(true);
         
-        const apiKey = "e4f8c0b2e93a83dcd12aed8e623f81ed";
-        const apiEndpoint = "http://api.openweathermap.org/data/2.5/weather";
+        const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
+        const apiEndpoint = process.env.NEXT_PUBLIC_OPENWEATHER_ENDPOINT;
         
         const api_url = `${apiEndpoint}?lat=${location[0]}&lon=${location[1]}&appid=${apiKey}&units=metric&lang=pt_br `;
 

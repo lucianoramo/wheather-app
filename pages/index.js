@@ -12,7 +12,7 @@ export default function Home() {
                 humidity: "0",
                 windDirection: "0",
                 feels_like: "0",
-                icon: "/sol.png",
+                icon: "",
             };
 
         return (
